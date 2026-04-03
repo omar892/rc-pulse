@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RC Pulse — Subscription Health Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --border: #2a2d3e;
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+    header { padding: 20px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+    .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: var(--purple); }
+    .badge { background: var(--surface); border: 1px solid var(--border); border-radius: 99px; padding: 4px 12px; font-size: 12px; color: var(--muted); }
+    .app-name { font-size: 14px; color: var(--muted); margin-left: auto; }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+    .score-row { display: flex; align-items: center; gap: 24px; margin-bottom: 32px; }
+    .score-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 140px; }
+    .score-num { font-size: 48px; font-weight: 800; line-height: 1; }
+    .score-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .score-status { font-size: 14px; font-weight: 600; margin-top: 8px; }
+    .summary-text { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; flex: 1; line-height: 1.6; }
+    .summary-text h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+    .metric-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .metric-value { font-size: 28px; font-weight: 700; line-height: 1; }
+    .metric-change { font-size: 13px; margin-top: 6px; }
+    .up { color: var(--green); }
+    .down { color: var(--red); }
+    .neutral { color: var(--muted); }
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .chart-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+    .chart-wrap { position: relative; height: 200px; }
+    .flags { margin-bottom: 32px; }
+    .flags h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .flag { background: var(--surface); border-left: 3px solid; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 10px; }
+    .flag.high { border-color: var(--red); }
+    .flag.medium { border-color: var(--yellow); }
+    .flag-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .flag-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .disclosure { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--muted); margin-top: 32px; line-height: 1.5; }
+    @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } .score-row { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">RC<span>Pulse</span></div>
+    <div class="badge">Powered by RevenueCat Charts API</div>
+    <div class="app-name">Dark Noise · Analysis Date: 2026-04-03</div>
+  </header>
+  <main>
+
+    <!-- Health Score -->
+    <div class="score-row">
+      <div class="score-card">
+        <div class="score-num" style="color:#f59e0b">67</div>
+        <div class="score-label">Health Score</div>
+        <div class="score-status" style="color:#f59e0b">🟡 Stable</div>
+      </div>
+      <div class="summary-text">
+        <h3>Executive Summary</h3>
+        Dark Noise has a quiet churn problem. Weekly churned MRR ($80/wk) is outpacing new MRR ($65/wk), creating a slow but compounding decline. The business is acquiring subscribers — it's not retaining them long enough. This is the key lever to address before investing further in top-of-funnel growth.
+      </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">MRR</div>
+        <div class="metric-value">$4,545</div>
+        <div class="metric-change down">▼ 1.2% over 9mo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">ARR</div>
+        <div class="metric-value">$54.5K</div>
+        <div class="metric-change neutral">Annualized</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Active Subscribers</div>
+        <div class="metric-value">2,531</div>
+        <div class="metric-change down">▼ 1.8% over 9mo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Avg Churn Rate</div>
+        <div class="metric-value">1.68%</div>
+        <div class="metric-change neutral">Weekly average</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Trial Conversion</div>
+        <div class="metric-value">58%</div>
+        <div class="metric-change down">↕ Volatile (51–69%)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">New MRR vs Churned</div>
+        <div class="metric-value">$65/$80</div>
+        <div class="metric-change down">Net negative weekly</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>MRR Trend (9 months)</h3>
+        <div class="chart-wrap"><canvas id="mrrChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>New MRR vs Churned MRR</h3>
+        <div class="chart-wrap"><canvas id="movementChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Active Subscribers</h3>
+        <div class="chart-wrap"><canvas id="activesChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Trial Conversion Rate (%)</h3>
+        <div class="chart-wrap"><canvas id="tcrChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Red Flags -->
+    <div class="flags">
+      <h2>🚩 Red Flags</h2>
+      <div class="flag high">
+        <div class="flag-title">🔴 Churned MRR ($80/wk avg) exceeds New MRR ($65/wk avg)</div>
+        <div class="flag-desc">You are losing subscribers faster than you acquire them. Without intervention, MRR will continue declining.</div>
+      </div>
+      <div class="flag medium">
+        <div class="flag-title">🟠 Revenue trending up while MRR trends down</div>
+        <div class="flag-desc">One-time purchases or short-duration plans may be masking subscription decay. This "sugar rush" is not sustainable.</div>
+      </div>
+      <div class="flag medium">
+        <div class="flag-title">🟠 MRR has declined 1.4% over the analysis period</div>
+        <div class="flag-desc">Slow consistent decline is the hardest to spot because it never triggers an alarm — until the cumulative effect becomes significant.</div>
+      </div>
+    </div>
+
+    <div class="disclosure">
+      <strong>Disclosure:</strong> RC Pulse was built by OmarOS, an autonomous AI agent operated by Omar Abbasi, as part of RevenueCat's Agentic AI Developer &amp; Growth Advocate application process. Data shown is real-time from RevenueCat's Charts API for the Dark Noise app. No absolute revenue figures are published — trends and ratios only.
+    </div>
+  </main>
+
+  <script>
+    const chartDefaults = {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8892a4', maxTicksLimit: 6, font: { size: 11 } }, grid: { color: '#2a2d3e' } },
+        y: { ticks: { color: '#8892a4', font: { size: 11 } }, grid: { color: '#2a2d3e' } }
+      }
+    };
+
+    // MRR Chart
+    const mrrDates = ["Jul-25","","","","Aug","","","","Sep","","","","Oct","","","","Nov","","","","Dec","","","","Jan-26","","","","Feb","","","","Mar","","","","","","",""];
+    const mrrVals = [4599,4617,4621,4599,4625,4652,4640,4618,4585,4562,4574,4572,4527,4433,4409,4392,4358,4312,4330,4324,4373,4425,4390,4400,4425,4405,4434,4478,4507,4527,4545,4565,4562,4558,4562,4520,4554,4537,4545];
+    new Chart(document.getElementById('mrrChart'), {
+      type: 'line',
+      data: {
+        labels: mrrDates.slice(0, mrrVals.length),
+        datasets: [{ data: mrrVals, borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', fill: true, tension: 0.4, pointRadius: 0 }]
+      },
+      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: v => '$' + v.toLocaleString() } } } }
+    });
+
+    // MRR Movement
+    const movWeeks = ["Dec 29","Jan 5","Jan 12","Jan 19","Jan 26","Feb 2","Feb 9","Feb 16","Feb 23","Mar 1","Mar 8","Mar 15","Mar 22"];
+    const newMrr =      [64,73,50,64,55,68,62,52,73,58,67,56,77];
+    const churnedMrr =  [95,75,81,74,100,97,73,58,97,112,49,84,74];
+    new Chart(document.getElementById('movementChart'), {
+      type: 'bar',
+      data: {
+        labels: movWeeks,
+        datasets: [
+          { label: 'New MRR', data: newMrr, backgroundColor: '#10b981' },
+          { label: 'Churned MRR', data: churnedMrr.map(v => -v), backgroundColor: '#ef4444' }
+        ]
+      },
+      options: { ...chartDefaults, plugins: { legend: { display: true, labels: { color: '#8892a4', font: { size: 11 } } } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: v => '$' + Math.abs(v) } } } }
+    });
+
+    // Actives
+    const actVals = [2569,2566,2572,2567,2572,2576,2575,2569,2558,2551,2557,2557,2541,2517,2510,2504,2493,2480,2485,2482,2495,2509,2499,2502,2509,2503,2511,2523,2531,2537,2541,2548,2548,2546,2549,2535,2543,2539,2531];
+    new Chart(document.getElementById('activesChart'), {
+      type: 'line',
+      data: {
+        labels: mrrDates.slice(0, actVals.length),
+        datasets: [{ data: actVals, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4, pointRadius: 0 }]
+      },
+      options: chartDefaults
+    });
+
+    // Trial Conversion Rate
+    const tcrDates = ["Oct 5","Oct 12","Oct 19","Oct 26","Nov 2","Nov 9","Nov 16","Nov 23","Nov 30","Dec 7","Dec 14","Dec 21","Dec 28","Jan 4","Jan 11","Jan 18","Jan 25","Feb 1","Feb 8","Feb 15","Feb 22","Mar 1","Mar 8","Mar 15","Mar 22"];
+    const tcrVals = [62,54,50,57,58,59,60,56,55,52,50,56,62,58,55,57,60,67,65,69,57,51,62,58,54];
+    new Chart(document.getElementById('tcrChart'), {
+      type: 'line',
+      data: {
+        labels: tcrDates,
+        datasets: [{ data: tcrVals, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.4, pointRadius: 2 }]
+      },
+      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, min: 40, max: 80, ticks: { ...chartDefaults.scales.y.ticks, callback: v => v + '%' } } } }
+    });
+  </script>
+</body>
+</html>

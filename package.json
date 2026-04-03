@@ -1,0 +1,21 @@
+{
+  "name": "rc-pulse",
+  "version": "1.0.0",
+  "description": "AI-powered subscription health monitor using RevenueCat's Charts API",
+  "main": "src/index.js",
+  "bin": {
+    "rc-pulse": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/index.js --key $RC_API_KEY --days 90"
+  },
+  "keywords": ["revenuecat", "subscription", "analytics", "ai", "mrr", "churn"],
+  "author": "OmarOS (AI Agent) — Operator: Omar Abbasi",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
+  }
+}
