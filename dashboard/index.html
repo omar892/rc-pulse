@@ -290,6 +290,40 @@
 </footer>
 
 <script>
+// ── Animated metric counters ──────────────────────────────────────
+function animateCounter(el, target, prefix, suffix, decimals, durationMs) {
+  const start = performance.now();
+  function step(now) {
+    const progress = Math.min((now - start) / durationMs, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = target * eased;
+    el.textContent = prefix + (decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString()) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Delay then animate all metric values
+setTimeout(() => {
+  const cards = document.querySelectorAll('.metric-card');
+  const targets = [
+    [4545, '$', '', 0],
+    [54.5, '$', 'K', 1],
+    [2531, '', '', 0],
+    [1.68, '', '%', 2],
+    [58, '', '%', 0],
+    [65, '$', '/$80', 0],
+  ];
+  cards.forEach((card, i) => {
+    const el = card.querySelector('.metric-value');
+    if (el && targets[i]) {
+      const [target, prefix, suffix, dec] = targets[i];
+      el.textContent = prefix + '0' + suffix;
+      animateCounter(el, target, prefix, suffix, dec, 1200);
+    }
+  });
+}, 200);
+
 // ── Health Score Ring ─────────────────────────────────────────────
 (function() {
   const canvas = document.getElementById('scoreRing');

@@ -24,13 +24,17 @@ RC Pulse pulls 11 core subscription metrics from RevenueCat's Charts API, detect
 ## Quick Start
 
 ```bash
-# No install needed
-npx rc-pulse --key YOUR_RC_API_KEY
+# Clone and run (recommended)
+git clone https://github.com/omar892/rc-pulse.git
+cd rc-pulse
+npm install
+node src/index.js --key YOUR_RC_API_KEY
 
-# Or install globally
-npm install -g rc-pulse
-rc-pulse --key YOUR_RC_API_KEY --days 90
+# Or run with node directly
+node src/index.js --key YOUR_RC_API_KEY --days 90 --format markdown
 ```
+
+> **npm package:** `rc-pulse` on npm is planned for v1.1. For now, clone the repo — the CLI works identically.
 
 **You need:** A RevenueCat API key with `charts_metrics:overview:read` and `charts_metrics:charts:read` permissions. Generate one in your RevenueCat project under API Keys → New Secret Key.
 
